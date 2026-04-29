@@ -1,0 +1,53 @@
+{
+  "skill_name": "az-devops",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "List all the projects in our Azure DevOps organization",
+      "expected_output": "A readable list of ADO projects including 'Technology', produced by running az devops project list",
+      "files": [],
+      "expectations": [
+        "Runs az devops project list (with --output table or --output json)",
+        "The output includes 'Technology' as a project name",
+        "Uses the PowerShell tool (not Bash) to run az commands on Windows"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Show me all active user stories in the Technology project that haven't been closed yet",
+      "expected_output": "A list of User Story work items in active/non-closed states, fetched via a WIQL query using az boards query",
+      "files": [],
+      "expectations": [
+        "Uses az boards query with a WIQL statement",
+        "The WIQL filters by WorkItemType = 'User Story'",
+        "The WIQL filters out closed/removed items (e.g. State NOT IN ('Closed', 'Removed'))",
+        "Results include work item ID and title at minimum",
+        "Uses the PowerShell tool to run the az command"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Can you pull up the details for work item 4008 and show me what child items are under it?",
+      "expected_output": "Details of work item 4008 ('ADO Initiatives') plus a listing of its two children (IDs 3934 and 4009)",
+      "files": [],
+      "expectations": [
+        "Runs az boards work-item show --id 4008 to fetch work item details",
+        "Shows the title 'ADO Initiatives' for work item 4008",
+        "Uses az boards work-item relation show --id 4008 or az boards work-item show --id 4008 --expand all to get relations",
+        "Identifies and displays child work item IDs 3934 and 4009",
+        "Fetches at least basic details (title, state, type) for each child item"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "What git repos do we have in the Technology project?",
+      "expected_output": "A list of Git repositories in the Technology ADO project, produced by az repos list",
+      "files": [],
+      "expectations": [
+        "Runs az repos list (with --output table or --output json)",
+        "Output includes at least one repository name",
+        "Uses the PowerShell tool to run the az command"
+      ]
+    }
+  ]
+}
