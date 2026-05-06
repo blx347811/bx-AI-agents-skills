@@ -1,6 +1,6 @@
 
 #!/usr/bin/env python3
-"""Populate the Solomon Partners SDD template from a sdd_content.json file."""
+"""Populate the bundled SDD template from a sdd_content.json file."""
 
 import json
 import sys
