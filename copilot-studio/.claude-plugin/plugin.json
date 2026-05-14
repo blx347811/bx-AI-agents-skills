@@ -1,0 +1,7 @@
+{
+  "name": "copilot-studio",
+  "version": "0.1.0",
+  "description": "Authoring skills for Microsoft Copilot Studio agents: new topics, variables, logging, edit-agent, best practices.",
+  "author": { "name": "Bryan Xiao", "email": "bryan.li.xiao@gmail.com" },
+  "keywords": ["copilot-studio", "microsoft", "agents"]
+}

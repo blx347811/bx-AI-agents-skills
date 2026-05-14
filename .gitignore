@@ -1,0 +1,6 @@
+# Claude Code worktree snapshots — these are temporary working copies, not repo content
+**/.claude/worktrees/
+
+# Python bytecode
+__pycache__/
+*.pyc
