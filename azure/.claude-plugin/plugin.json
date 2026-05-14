@@ -1,0 +1,7 @@
+{
+  "name": "azure",
+  "version": "0.1.0",
+  "description": "Azure DevOps interaction skills via the az CLI.",
+  "author": { "name": "Bryan Xiao", "email": "bryan.li.xiao@gmail.com" },
+  "keywords": ["azure", "azure-devops", "ado"]
+}

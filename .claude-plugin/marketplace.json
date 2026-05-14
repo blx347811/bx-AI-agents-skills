@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-marketplace.json",
+  "name": "bx-ai-agents-skills",
+  "description": "Bryan Xiao's personal Claude Code plugins for Azure DevOps, Copilot Studio authoring, and product management workflows.",
+  "owner": {
+    "name": "Bryan Xiao",
+    "email": "bryan.li.xiao@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "azure",
+      "source": "./azure",
+      "description": "Azure DevOps interaction via the az CLI — work items, sprints, repos.",
+      "category": "devops",
+      "keywords": ["azure", "azure-devops", "ado", "work-items"]
+    },
+    {
+      "name": "copilot-studio",
+      "source": "./copilot-studio",
+      "description": "Authoring helpers for Microsoft Copilot Studio agents — topics, variables, logging, best practices.",
+      "category": "authoring",
+      "keywords": ["copilot-studio", "microsoft", "agents", "topics"]
+    },
+    {
+      "name": "product-manager",
+      "source": "./product-manager",
+      "description": "5-stage product management lifecycle (demand → themes → PRD → work items → exec narrative) plus the product-manager subagent and PPT/SDD generation skills.",
+      "category": "productivity",
+      "keywords": ["product-management", "prd", "roadmap", "themes", "pptx", "sdd"]
+    }
+  ]
+}
