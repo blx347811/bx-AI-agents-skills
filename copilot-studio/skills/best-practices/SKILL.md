@@ -21,7 +21,7 @@ Uses a `Switch()` Power Fx expression inside a `BeginDialog` node to dynamically
 
 ## Prevent Child Agent Responses → [prevent-child-agent-responses.md](prevent-child-agent-responses.md)
 
-Prevents child agents (connected agents) from sending messages directly to the user. Clarifies the common misconception about the completion setting and provides the instruction block to force child agents to use output variables instead of `SendMessageTool`.
+Prevents child agents from sending messages directly to the user. Clarifies the common misconception about the completion setting and provides the instruction block to force child agents to use output variables instead of `SendMessageTool`.
 
 **Read this best-practice when:**
 - The user wants a child agent to return data without messaging the user
@@ -37,6 +37,10 @@ Wires a connected agent to return data silently to the main agent via global var
 - A connected agent's output is reaching the user when it shouldn't
 - The main agent isn't receiving values back from a connected agent
 - The user needs to understand how connected-agent I/O wiring differs from child-agent I/O wiring
+- The agent you're invoking has its own agent.mcs.yml, settings.mcs.yml, and isAgentConnectable: true — i.e. it is a standalone publishable agent, not a topic-level module
+- You need to create global variables for connected-agent I/O (see variable format note below)
+
+**Before creating global variables:** read an existing variable file in the project first — do not guess property names from the UI labels. The correct YAML keys are `isExternalInitializationAllowed: true` (input — "External source can set the value") and `isOutputToExternalCallers: true` (output — "External source can receive the value"). Variables also require `name:`, `schemaName:` (`<agentSchemaName>.globalvariable.<VariableName>`), and `kind: GlobalVariableComponent` fields. The UI label text does not map 1:1 to YAML keys.
 
 ## Date Context → [date-context.md](date-context.md)
 
