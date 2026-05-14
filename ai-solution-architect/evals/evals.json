@@ -1,0 +1,23 @@
+{
+  "skill_name": "ai-solution-architect",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I want to build an AI agent that handles tier-1 customer support tickets. It should read from our help docs, look up order status via API, and escalate to a human if it can't resolve the issue. What architecture should I use?",
+      "expected_output": "Structured architecture recommendation: complexity level assessment (likely single agent + tools), component design covering LLM, tools (help doc retrieval, order lookup API, escalation), HITL checkpoint definition, governance checklist, and ASCII architecture diagram.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "We get hundreds of PDFs a day (invoices, contracts, reports). I need an AI system that extracts key fields from each doc, routes it to the right team based on doc type, and flags anything that looks unusual. Do I need multiple agents for this, or can one agent handle it?",
+      "expected_output": "Complexity assessment comparing single-agent vs. multi-agent options with explicit justification. Should recommend the simpler option unless there's a clear reason to fan out. Component design for extraction, classification, routing, and anomaly detection. Failure mode analysis covering malformed PDFs, misclassification, and routing errors.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "We're building an internal research assistant that answers questions using our company's knowledge base — wiki pages, Confluence docs, past reports. Users ask natural language questions and expect sourced answers. How should I set up memory and retrieval for this?",
+      "expected_output": "Focused component design for RAG: chunking strategy, embedding model selection (tech-agnostic options), vector store options, retrieval mechanism (dense, sparse, hybrid), context window management, and source citation approach. Should also cover freshness/sync strategy for the knowledge base and hallucination guardrails.",
+      "files": []
+    }
+  ]
+}

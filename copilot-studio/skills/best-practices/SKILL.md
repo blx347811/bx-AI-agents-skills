@@ -1,7 +1,7 @@
 ---
 user-invocable: false
 name: best-practices
-description: "Best practices for Copilot Studio agents. Covers the shared OnActivity initialization pattern, dynamic topic redirects with Switch expressions, and preventing child agents from responding directly to users. USE FOR: OnActivity provisioning, conversation-init, personalized knowledge, dynamic redirect, Switch, BeginDialog, if/then/else replacement, child agent responses, completion setting, SendMessageTool, output variables, connected agents."
+description: "Best practices for Copilot Studio agents. Covers the shared OnActivity initialization pattern, dynamic topic redirects with Switch expressions, preventing child agents from responding directly to users, and silently managing connected agent I/O. USE FOR: OnActivity provisioning, conversation-init, personalized knowledge, dynamic redirect, Switch, BeginDialog, if/then/else replacement, child agent responses, completion setting, SendMessageTool, output variables, connected agents, connected agent inputs, connected agent outputs, global variables, External source can set the value, External source can receive the value, silent connected agent, dual assignment."
 context: fork
 agent: copilot-studio-author
 ---
@@ -27,6 +27,16 @@ Prevents child agents (connected agents) from sending messages directly to the u
 - The user wants a child agent to return data without messaging the user
 - The user is confused about the completion setting on a child agent
 - The parent agent needs to control all user-facing responses
+
+## Silent Connected Agent Responses → [silent-connected-agent-responses.md](silent-connected-agent-responses.md)
+
+Wires a connected agent to return data silently to the main agent via global variables, while the main agent owns all user-facing messaging. Covers the connected-agent-specific I/O plumbing (action-level `inputType`/`outputType`, external-source toggles, dual `Global`/`Topic` assignment) paired with the behavioral instruction block that prevents direct user messages.
+
+**Read this best-practice when:**
+- The user is building or invoking a connected agent and the main agent must own all messaging
+- A connected agent's output is reaching the user when it shouldn't
+- The main agent isn't receiving values back from a connected agent
+- The user needs to understand how connected-agent I/O wiring differs from child-agent I/O wiring
 
 ## Date Context → [date-context.md](date-context.md)
 
