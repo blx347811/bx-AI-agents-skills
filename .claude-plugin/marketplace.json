@@ -29,8 +29,8 @@
       "keywords": ["product-management", "prd", "roadmap", "themes", "pptx", "sdd"]
     },
     {
-      "name": "coding-agent",
-      "source": "./coding-agent",
+      "name": "better-planning",
+      "source": "./better-planning",
       "description": "Custom planning system with strict role separation — a read-only planner (Opus), a scoped research agent (Haiku), and a sole CLAUDE.md writer (Sonnet). Invoke via /plan <task>.",
       "category": "devops",
       "keywords": ["planning", "agents", "claude-md", "coding", "subagents"]
