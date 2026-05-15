@@ -27,6 +27,13 @@
       "description": "5-stage product management lifecycle (demand → themes → PRD → work items → exec narrative) plus the product-manager subagent and PPT/SDD generation skills.",
       "category": "productivity",
       "keywords": ["product-management", "prd", "roadmap", "themes", "pptx", "sdd"]
+    },
+    {
+      "name": "coding-agent",
+      "source": "./coding-agent",
+      "description": "Custom planning system with strict role separation — a read-only planner (Opus), a scoped research agent (Haiku), and a sole CLAUDE.md writer (Sonnet). Invoke via /plan <task>.",
+      "category": "devops",
+      "keywords": ["planning", "agents", "claude-md", "coding", "subagents"]
     }
   ]
 }
