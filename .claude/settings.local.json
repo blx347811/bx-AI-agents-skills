@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.claude.com)",
+      "Bash(git mv *)",
+      "Bash(git *)",
+      "Bash(GIT_DIR=/mnt/c/Users/taoy1/OneDrive/Bryan_Docs/Tech/Personal_projects/bx-AI-agents-skills/.git GIT_WORK_TREE=/mnt/c/Users/taoy1/OneDrive/Bryan_Docs/Tech/Personal_projects/bx-AI-agents-skills git worktree *)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  }
+}
