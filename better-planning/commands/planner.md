@@ -51,7 +51,7 @@ Produce a plan that:
 
 ### 6. Flag context drift (do not fix it)
 
-If exploration revealed that CLAUDE.md is materially wrong or missing important architecture, end your plan with a `## Context Drift Detected` section listing what's stale. Do **not** edit CLAUDE.md yourself — that is handled by the `/update-context` skill.
+If exploration revealed that CLAUDE.md is materially wrong or missing important architecture, end your plan with a `## Context Drift Detected` section listing what's stale. Do **not** edit CLAUDE.md yourself — only the `update-context` agent has Edit access. After the user confirms they want the drift addressed, dispatch the `update-context` agent via the Task tool, passing the drift report as the prompt.
 
 ## Constraints
 
@@ -87,6 +87,8 @@ If exploration revealed that CLAUDE.md is materially wrong or missing important 
 ```
 
 After outputting the plan, if it ends with "Context Drift Detected," ask the user whether to:
-1. Run `/update-context` to address the drift first, then re-plan
+1. Dispatch the `update-context` agent now (with the drift report) to refresh CLAUDE.md, then re-plan
 2. Proceed with the current plan and update docs later
 3. Refine the plan further
+
+When the user picks option 1, call the `update-context` agent via the Task tool with the drift section as the prompt, then relay its returned summary (including any "Flagged for human review" items) to the user verbatim.
