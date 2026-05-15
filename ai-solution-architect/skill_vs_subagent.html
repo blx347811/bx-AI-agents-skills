@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill vs sub-agent trade-offs</title>
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4ef;
+    --color-background-tertiary: #faf9f5;
+    --color-background-info: #e6f1fb;
+    --color-text-primary: #2c2c2a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-info: #0c447c;
+    --color-border-tertiary: rgba(0, 0, 0, 0.15);
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #2a2a28;
+      --color-background-secondary: #1f1f1d;
+      --color-background-tertiary: #181816;
+      --color-background-info: #0c447c;
+      --color-text-primary: #e8e6df;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-info: #85b7eb;
+      --color-border-tertiary: rgba(255, 255, 255, 0.15);
+    }
+    body { background: #181816; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    background: var(--color-background-tertiary);
+    margin: 0;
+    padding: 2rem 1rem;
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 22px; font-weight: 500; margin: 0 0 4px; }
+  .lede { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 1.5rem; }
+  .swr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0 1.25rem; }
+  @media (max-width: 560px) { .swr-grid { grid-template-columns: 1fr; } }
+  .swr-col { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; min-height: 220px; }
+  .swr-col h3 { margin: 0 0 4px; font-size: 16px; font-weight: 500; }
+  .swr-col .swr-sub { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 12px; }
+  .swr-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .swr-pill { font-size: 11px; padding: 3px 8px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-secondary); }
+  .swr-list { font-size: 13px; line-height: 1.7; color: var(--color-text-secondary); padding-left: 1rem; margin: 0; }
+  .swr-list li { padding: 2px 0; }
+  .swr-traits { display: flex; flex-direction: column; gap: 6px; margin: 0 0 1rem; }
+  .swr-trait { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); cursor: pointer; user-select: none; transition: background 0.15s; background: var(--color-background-primary); }
+  .swr-trait:hover { background: var(--color-background-secondary); }
+  .swr-trait input { margin: 0; }
+  .swr-trait-text { font-size: 13px; flex: 1; }
+  .swr-trait-tag { font-size: 11px; padding: 2px 8px; border-radius: var(--border-radius-md); color: var(--color-text-secondary); background: var(--color-background-secondary); }
+  .swr-recommendation { padding: 1rem 1.25rem; border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); margin-top: 1rem; background: var(--color-background-primary); }
+  .swr-rec-label { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 4px; }
+  .swr-rec-text { font-size: 15px; font-weight: 500; margin: 0; }
+  .swr-rec-detail { font-size: 13px; color: var(--color-text-secondary); margin: 6px 0 0; line-height: 1.6; }
+  .swr-bar-wrap { display: flex; gap: 4px; margin-top: 12px; height: 6px; border-radius: 3px; overflow: hidden; background: var(--color-background-secondary); }
+  .swr-bar-skill { background: #534AB7; transition: width 0.25s; }
+  .swr-bar-sub { background: #1D9E75; transition: width 0.25s; }
+  .swr-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-text-tertiary); margin-top: 4px; }
+  .swr-section-label { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Skill vs sub-agent trade-offs</h1>
+  <p class="lede">Toggle the traits that describe your task to see which approach fits better.</p>
+
+  <p class="swr-section-label">Toggle the traits that describe your task</p>
+  <div class="swr-traits" id="traits"></div>
+
+  <div class="swr-grid">
+    <div class="swr-col" id="skill-col">
+      <h3>Skill</h3>
+      <p class="swr-sub">Expertise injected into the current context</p>
+      <div class="swr-meta">
+        <span class="swr-pill">Shared window</span>
+        <span class="swr-pill">User sees the work</span>
+        <span class="swr-pill">Lazy-loaded</span>
+      </div>
+      <p class="swr-section-label" style="margin-top: 8px;">Strong fit when</p>
+      <ul class="swr-list" id="skill-points"></ul>
+    </div>
+    <div class="swr-col" id="sub-col">
+      <h3>Sub-agent</h3>
+      <p class="swr-sub">Scoped execution that returns a result</p>
+      <div class="swr-meta">
+        <span class="swr-pill">Isolated window</span>
+        <span class="swr-pill">Opaque to parent</span>
+        <span class="swr-pill">Tool-like contract</span>
+      </div>
+      <p class="swr-section-label" style="margin-top: 8px;">Strong fit when</p>
+      <ul class="swr-list" id="sub-points"></ul>
+    </div>
+  </div>
+
+  <div class="swr-recommendation" id="rec">
+    <p class="swr-rec-label">Recommendation</p>
+    <p class="swr-rec-text" id="rec-text">Toggle traits above</p>
+    <p class="swr-rec-detail" id="rec-detail">The scale tips based on which traits matter most for your task.</p>
+    <div class="swr-bar-wrap">
+      <div class="swr-bar-skill" id="bar-skill" style="width: 50%;"></div>
+      <div class="swr-bar-sub" id="bar-sub" style="width: 50%;"></div>
+    </div>
+    <div class="swr-axis">
+      <span>Skill</span>
+      <span>Sub-agent</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const traits = [
+    { id: 't1', text: 'User iterates with the output turn by turn', side: 'skill' },
+    { id: 't2', text: 'Work generates lots of intermediate tool output', side: 'sub' },
+    { id: 't3', text: 'Expertise applies across many different tasks', side: 'skill' },
+    { id: 't4', text: 'Clean input and discrete output', side: 'sub' },
+    { id: 't5', text: 'User benefits from watching the process', side: 'skill' },
+    { id: 't6', text: 'Needs a restricted tool allowlist', side: 'sub' },
+    { id: 't7', text: "Short task, doesn't bloat the conversation", side: 'skill' },
+    { id: 't8', text: 'Will be invoked repeatedly with stable contract', side: 'sub' },
+    { id: 't9', text: 'Output is reviewed and edited in-place', side: 'skill' },
+    { id: 't10', text: 'Could run in parallel with other work', side: 'sub' },
+  ];
+
+  const skillPoints = [
+    'Conversation flows with no handoffs',
+    'User can redirect or correct mid-task',
+    'House style and conventions stay loaded',
+    'Cheap to author — just a markdown file',
+    'Composable across many different tasks',
+  ];
+
+  const subPoints = [
+    'Parent context stays clean',
+    'Heavy reads and searches stay isolated',
+    'Tool allowlist enforces scope at the boundary',
+    'Stable input/output contract for reuse',
+    'Enables parallel fan-out across items',
+  ];
+
+  const traitsEl = document.getElementById('traits');
+  traits.forEach(t => {
+    const label = document.createElement('label');
+    label.className = 'swr-trait';
+    label.innerHTML = `
+      <input type="checkbox" data-id="${t.id}" data-side="${t.side}">
+      <span class="swr-trait-text">${t.text}</span>
+      <span class="swr-trait-tag">${t.side === 'skill' ? 'skill' : 'sub-agent'}</span>
+    `;
+    traitsEl.appendChild(label);
+  });
+
+  document.getElementById('skill-points').innerHTML = skillPoints.map(p => `<li>${p}</li>`).join('');
+  document.getElementById('sub-points').innerHTML = subPoints.map(p => `<li>${p}</li>`).join('');
+
+  function updateRec() {
+    const boxes = traitsEl.querySelectorAll('input[type="checkbox"]');
+    let skill = 0, sub = 0;
+    boxes.forEach(b => {
+      if (b.checked) {
+        if (b.dataset.side === 'skill') skill++;
+        else sub++;
+      }
+    });
+    const total = skill + sub;
+    const recText = document.getElementById('rec-text');
+    const recDetail = document.getElementById('rec-detail');
+    const barSkill = document.getElementById('bar-skill');
+    const barSub = document.getElementById('bar-sub');
+
+    if (total === 0) {
+      barSkill.style.width = '50%';
+      barSub.style.width = '50%';
+      recText.textContent = 'Toggle traits above';
+      recDetail.textContent = 'The scale tips based on which traits matter most for your task.';
+    } else {
+      const skillPct = Math.round((skill / total) * 100);
+      const subPct = 100 - skillPct;
+      barSkill.style.width = skillPct + '%';
+      barSub.style.width = subPct + '%';
+
+      if (skill > sub) {
+        recText.textContent = 'Lean toward a skill';
+        recDetail.textContent = `${skill} skill-favoring trait${skill === 1 ? '' : 's'} vs ${sub} sub-agent. The work belongs in the shared conversation where the user can stay involved.`;
+      } else if (sub > skill) {
+        recText.textContent = 'Lean toward a sub-agent';
+        recDetail.textContent = `${sub} sub-agent-favoring trait${sub === 1 ? '' : 's'} vs ${skill} skill. Isolation buys you a clean parent context and a stable contract.`;
+      } else {
+        recText.textContent = 'Could go either way';
+        recDetail.textContent = `Balanced at ${skill}–${sub}. Default to a skill — it's cheaper to build and easier to migrate to a sub-agent later if the contract stabilizes.`;
+      }
+    }
+  }
+
+  traitsEl.addEventListener('change', updateRec);
+  updateRec();
+</script>
+</body>
+</html>
